@@ -1,5 +1,11 @@
 package moteur.zero.plus;
 
+/**
+ * Enum réferençant les stratégie de gestion de conflit
+ * 
+ * @author JBD
+ *
+ */
 public enum StrategieConflit {
 	ALEATOIRE("Choix d'une règle aléatoirement"),
 	

@@ -13,10 +13,18 @@ import moteur.zero.plus.Regle;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Classe de test du moteur d'inference 0+. Les tests utilisent une version
+ * obsolete d'Assert.
+ * 
+ * @author JBD
+ *
+ */
 @SuppressWarnings("deprecation")
 public class MoteurTest {
 
 	Moteur m;
+
 	@Before
 	public void init() {
 		m = new Moteur();
@@ -53,11 +61,11 @@ public class MoteurTest {
 		Assert.assertTrue(Moteur.baseFait.contains("perteDePoint"));
 		Assert.assertEquals(Moteur.baseFait.get("perteDePoint"), "2");
 	}
-	
+
 	@Test
-	public void testChainageArriere(){
+	public void testChainageArriere() {
 		Assert.assertTrue(m.chainageArriere("perteDePoint", "2"));
 		Assert.assertFalse(m.chainageArriere("perteDePoint", "20"));
-		
+
 	}
 }

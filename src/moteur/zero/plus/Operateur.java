@@ -2,7 +2,8 @@ package moteur.zero.plus;
 
 /**
  * Enumeration représentant les opérateurs géré par le moteur d'inférence.
- * @author etudiant
+ * 
+ * @author JBD
  *
  */
 public enum Operateur {

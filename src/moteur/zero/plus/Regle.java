@@ -4,7 +4,7 @@ package moteur.zero.plus;
  * 1:A = 2&B = 3:C = 4<br/>
  * Dans le cas des booleans, il est nécessaire d'écrire true ou false
  * 
- * @author etudiant
+ * @author JBD
  *
  */
 public class Regle {

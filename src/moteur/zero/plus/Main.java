@@ -1,5 +1,9 @@
 package moteur.zero.plus;
 
+/**
+ * @author JBD
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) {

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author etudiant
+ * Classe représentant la base d'incoherence du systeme expert
+ * 
+ * @author JBD
  *
  */
 public class BaseIncoherence {

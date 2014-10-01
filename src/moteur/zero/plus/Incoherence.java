@@ -4,7 +4,7 @@ package moteur.zero.plus;
  * Classe représentant les incoherences qu'il faut pouvoir detecter dans le
  * moteur
  * 
- * @author etudiant
+ * @author JBD
  *
  */
 public class Incoherence {

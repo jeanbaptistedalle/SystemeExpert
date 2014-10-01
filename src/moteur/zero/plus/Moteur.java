@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Classe représentant un moteur d'inference 0+
  * 
- * @author etudiant
+ * @author JBD
  *
  */
 public class Moteur {
