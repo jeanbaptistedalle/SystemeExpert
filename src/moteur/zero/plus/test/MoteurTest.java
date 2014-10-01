@@ -14,8 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Classe de test du moteur d'inference 0+. Les tests utilisent une version
- * obsolete d'Assert.
+ * Classe de test du moteur d'inference 0+.
+ * 
+ * @FIXME Les tests utilisent une version obsolete d'Assert. *
  * 
  * @author JBD
  *
