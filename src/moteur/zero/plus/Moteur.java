@@ -1,5 +1,9 @@
 package moteur.zero.plus;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +39,81 @@ public class Moteur {
 		return result.toString();
 	}
 
+
 	/**
 	 * Genere le moteur d'inference à l'aide des fichiers BaseFait.txt,
-	 * BaseRegle.txt et BaseIncoherence.txt
+	 * BaseRegle.txt et BaseIncoherence.txt 
 	 */
 	public void generate() {
+		
+		int numRegle  ;
+		Element tmp ;
+		List<Element> listElement = new ArrayList<Element>() ;
+		String ligne , resultat, element , nomElement , valElement ;
+		String[] tabLigne , tabElement, tabRegle , tabResultat;
+		String[] tabFait , tabFaitFinaux ;
+		BufferedReader Lecteur = null , lecteurFait = null ;
+		Operateur operateur ;
+		
+		
+		try
+		{
+			Lecteur = new BufferedReader(new FileReader("Regles.txt")) ;
+			lecteurFait = new BufferedReader(new FileReader("Fait.txt")) ;
+			
+		Regle r = null ;
+		while((ligne = Lecteur.readLine()) != null )
+		{
+			tabLigne = ligne.split("[:]") ;
+			numRegle = Integer.parseInt(tabLigne[0]);
+			tabResultat = tabLigne[2].split("[ ]") ;
+			tabElement = tabLigne[1].split("[&]") ;
+			if(tabElement.length == 1)
+			{
+				tabRegle = tabElement[0].split("[ ]") ;
+				nomElement = tabRegle[0] ;
+				operateur = Operateur.testOperateur(tabRegle[1]) ;
+				valElement = tabRegle[2] ;
+				r = new Regle(numRegle, new Element(nomElement, operateur , valElement),tabResultat[0],tabResultat[2]);
+				baseRegle.addRegle(r);
+			}
+			else
+			{
+				for(int i=0 ; i<tabElement.length ; i++)
+				{
+					tabRegle = tabElement[i].split("[ ]") ;
+					nomElement = tabRegle[i] ;
+					operateur = Operateur.testOperateur(tabRegle[i+1]) ;
+					valElement = tabRegle[i+2] ;
+					tmp = new Element(nomElement, operateur, valElement) ;
+					listElement.add(tmp);
+				}
+				r.addElements(listElement);
+			}
+		}
+		
+		while((ligne = lecteurFait.readLine()) != null)
+		{
+			tabFait = ligne.split("[:]") ;
+			for(int i=0 ; i<tabFait.length ; i++)
+			{
+				tabFaitFinaux = tabFait[i].split("[ ]") ;
+				baseFait.addFait(tabFaitFinaux[0], tabFaitFinaux[1]);
+			}
+		}
+			
+		}
+		catch(FileNotFoundException fI)
+		{
+			fI.printStackTrace();
+		}
+		catch(IOException i)
+		{
+			i.printStackTrace();
+		}
 
 	}
+
 
 	/**
 	 * Methode executant un chainage avant

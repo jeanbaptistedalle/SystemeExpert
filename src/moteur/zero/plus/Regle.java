@@ -1,4 +1,7 @@
 package moteur.zero.plus;
+
+import java.util.List;
+
 /**
  * Classe représentant une règle. La syntaxe d'une règle est : <br/>
  * 1:A = 2&B = 3:C = 4<br/>
@@ -14,16 +17,19 @@ public class Regle {
 	private String nomResultat;
 	private String valeurResultat;
 
-	public Regle() {}
-	
-	public Regle(final Integer numero, final Element element, final String nomResultat, final String valeurResultat){
+	public Regle() {
+	}
+
+	public Regle(final Integer numero, final Element element,
+			final String nomResultat, final String valeurResultat) {
 		this.numero = numero;
 		this.element = element;
 		this.nomResultat = nomResultat;
 		this.valeurResultat = valeurResultat;
 	}
-	
-	public Regle(final Integer numero, final String nomResultat, final String valeurResultat){
+
+	public Regle(final Integer numero, final String nomResultat,
+			final String valeurResultat) {
 		this(numero, null, nomResultat, valeurResultat);
 	}
 
@@ -58,27 +64,29 @@ public class Regle {
 	public void setValeurResultat(final String valeurResultat) {
 		this.valeurResultat = valeurResultat;
 	}
-	
-	public boolean evaluate(){
+
+	public boolean evaluate() {
 		return element.evaluate();
 	}
-	
+
 	/**
 	 * Retourne le nombre de prémisse de la règle
 	 * 
 	 * @return
 	 */
-	public int getNbPremisse(){
+	public int getNbPremisse() {
 		Element elt = element;
 		int cpt = 0;
-		while(elt != null){
+		while (elt != null) {
 			cpt++;
 			elt = elt.getNext();
 		}
 		return cpt;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -89,7 +97,9 @@ public class Regle {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -124,5 +134,22 @@ public class Regle {
 		result.append(" = ");
 		result.append(valeurResultat);
 		return result.toString();
+	}
+
+	/**
+	 * Permet d'ajouter une liste d'élément à la règle. Si une liste existe
+	 * déjà, on les ajoute aux éléments existants
+	 * 
+	 * @param elements
+	 */
+	public void addElements(final List<Element> elements) {
+		Element existing = this.element;
+		while (existing.getNext() != null) {
+			existing = existing.getNext();
+		}
+		for (final Element elt : elements) {
+			existing.setNext(elt);
+			existing = existing.getNext();
+		}
 	}
 }

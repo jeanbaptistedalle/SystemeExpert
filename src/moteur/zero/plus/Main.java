@@ -1,6 +1,8 @@
 package moteur.zero.plus;
 
 /**
+ * Une classe main pour lancer quelques tests non automatique
+ * 
  * @author JBD
  *
  */
