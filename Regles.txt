@@ -1,0 +1,2 @@
+1:vitesse > 130:perteDePoint = 3
+2:vitesse > 110&temps = pluie:perteDePoint = 2
