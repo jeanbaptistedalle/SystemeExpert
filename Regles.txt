@@ -1,2 +1,6 @@
 1:vitesse > 130:perteDePoint = 3
 2:vitesse > 110&temps = pluie:perteDePoint = 2
+3:vitesse > 50&typeRoute = ville:perteDePoint = 3
+4:vitesse = 0&typeRoute = autoroute:perteDePoint = 3
+5:vitesse > 30&typeRoute = zone30:perteDePoint = 2
+6:perteDePoint > 12:perteDePermis = true

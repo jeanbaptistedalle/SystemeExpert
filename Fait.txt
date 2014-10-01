@@ -1,1 +1,3 @@
-vitesse=120:typeRoute=autoroute:temps=pluie
+vitesse=120
+typeRoute=autoroute
+temps=pluie

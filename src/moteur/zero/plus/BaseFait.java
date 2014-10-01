@@ -29,6 +29,14 @@ public class BaseFait {
 	public void put(final String key, final String value) {
 		if (key != null && value != null) {
 			if (faits.containsKey(key)) {
+				try{
+					int nb = Integer.parseInt(faits.get(key));
+					int newNb = Integer.parseInt(value);
+					faits.put(key, new Integer(nb+newNb).toString());
+					return;
+				}catch(final NumberFormatException e){
+					//pas un int, on écrase la valeur
+				}
 				// Dans le cas ou la clef existe déjà, on additionne ?
 			}
 			faits.put(key, value);

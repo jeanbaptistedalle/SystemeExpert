@@ -28,7 +28,7 @@ public class MoteurTest {
 
 	@Before
 	public void init() {
-		m = new Moteur();
+		m = new Moteur(false);
 		final BaseRegle br = Moteur.baseRegle;
 		final BaseIncoherence bi = Moteur.baseIncoherence;
 		final BaseFait bf = Moteur.baseFait;

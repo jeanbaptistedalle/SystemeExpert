@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Classe représentant un moteur d'inference 0+
@@ -20,12 +22,30 @@ public class Moteur {
 	public static BaseRegle baseRegle = new BaseRegle();
 	public static BaseIncoherence baseIncoherence = new BaseIncoherence();
 	public static List<String> stackTrace = new ArrayList<String>();
+	public static Scanner scan = new Scanner(System.in);
 
 	public StrategieConflit strategieConflit;
 
+	/**
+	 * Crée le moteur en générant les base à l'aide des fichiers .txt
+	 * correspondants
+	 */
 	public Moteur() {
+		this(true);
+	}
+
+	/**
+	 * Crée le moteur en générant les base à l'aide des fichiers .txt
+	 * correspondants si generer = true
+	 * 
+	 * @param generer
+	 */
+	public Moteur(final boolean generer) {
 		strategieConflit = StrategieConflit.PREMIERE_TROUVEE;
-		generate();
+		if (generer) {
+			// TODO a decommenter
+			// generate();
+		}
 	}
 
 	public String toString() {
@@ -39,81 +59,67 @@ public class Moteur {
 		return result.toString();
 	}
 
-
 	/**
-	 * Genere le moteur d'inference à l'aide des fichiers BaseFait.txt,
-	 * BaseRegle.txt et BaseIncoherence.txt 
+	 * Genere le moteur d'inference à l'aide des fichiers Fait.txt, Regles.txt
+	 * et BaseIncoherence.txt
 	 */
 	public void generate() {
-		
-		int numRegle  ;
-		Element tmp ;
-		List<Element> listElement = new ArrayList<Element>() ;
-		String ligne , resultat, element , nomElement , valElement ;
-		String[] tabLigne , tabElement, tabRegle , tabResultat;
-		String[] tabFait , tabFaitFinaux ;
-		BufferedReader Lecteur = null , lecteurFait = null ;
-		Operateur operateur ;
-		
-		
-		try
-		{
-			Lecteur = new BufferedReader(new FileReader("Regles.txt")) ;
-			lecteurFait = new BufferedReader(new FileReader("Fait.txt")) ;
-			
-		Regle r = null ;
-		while((ligne = Lecteur.readLine()) != null )
-		{
-			tabLigne = ligne.split("[:]") ;
-			numRegle = Integer.parseInt(tabLigne[0]);
-			tabResultat = tabLigne[2].split("[ ]") ;
-			tabElement = tabLigne[1].split("[&]") ;
-			if(tabElement.length == 1)
-			{
-				tabRegle = tabElement[0].split("[ ]") ;
-				nomElement = tabRegle[0] ;
-				operateur = Operateur.testOperateur(tabRegle[1]) ;
-				valElement = tabRegle[2] ;
-				r = new Regle(numRegle, new Element(nomElement, operateur , valElement),tabResultat[0],tabResultat[2]);
-				baseRegle.addRegle(r);
-			}
-			else
-			{
-				for(int i=0 ; i<tabElement.length ; i++)
-				{
-					tabRegle = tabElement[i].split("[ ]") ;
-					nomElement = tabRegle[i] ;
-					operateur = Operateur.testOperateur(tabRegle[i+1]) ;
-					valElement = tabRegle[i+2] ;
-					tmp = new Element(nomElement, operateur, valElement) ;
-					listElement.add(tmp);
+
+		int numRegle;
+		Element tmp;
+		List<Element> listElement = new ArrayList<Element>();
+		String ligne, resultat, element, nomElement, valElement;
+		String[] tabLigne, tabElement, tabRegle, tabResultat;
+		String[] tabFait, tabFaitFinaux;
+		BufferedReader Lecteur = null, lecteurFait = null;
+		Operateur operateur;
+
+		try {
+			Lecteur = new BufferedReader(new FileReader("Regles.txt"));
+			lecteurFait = new BufferedReader(new FileReader("Fait.txt"));
+
+			Regle r = null;
+			while ((ligne = Lecteur.readLine()) != null) {
+				tabLigne = ligne.split("[:]");
+				numRegle = Integer.parseInt(tabLigne[0]);
+				tabResultat = tabLigne[2].split("[ ]");
+				tabElement = tabLigne[1].split("[&]");
+				if (tabElement.length == 1) {
+					tabRegle = tabElement[0].split("[ ]");
+					nomElement = tabRegle[0];
+					operateur = Operateur.testOperateur(tabRegle[1]);
+					valElement = tabRegle[2];
+					r = new Regle(numRegle, new Element(nomElement, operateur,
+							valElement), tabResultat[0], tabResultat[2]);
+					baseRegle.addRegle(r);
+				} else {
+					for (int i = 0; i < tabElement.length; i++) {
+						tabRegle = tabElement[i].split("[ ]");
+						nomElement = tabRegle[i];
+						operateur = Operateur.testOperateur(tabRegle[i + 1]);
+						valElement = tabRegle[i + 2];
+						tmp = new Element(nomElement, operateur, valElement);
+						listElement.add(tmp);
+					}
+					r.addElements(listElement);
 				}
-				r.addElements(listElement);
 			}
-		}
-		
-		while((ligne = lecteurFait.readLine()) != null)
-		{
-			tabFait = ligne.split("[:]") ;
-			for(int i=0 ; i<tabFait.length ; i++)
-			{
-				tabFaitFinaux = tabFait[i].split("[ ]") ;
-				baseFait.addFait(tabFaitFinaux[0], tabFaitFinaux[1]);
+
+			while ((ligne = lecteurFait.readLine()) != null) {
+				tabFait = ligne.split("[:]");
+				for (int i = 0; i < tabFait.length; i++) {
+					tabFaitFinaux = tabFait[i].split("[ ]");
+					baseFait.addFait(tabFaitFinaux[0], tabFaitFinaux[1]);
+				}
 			}
-		}
-			
-		}
-		catch(FileNotFoundException fI)
-		{
+
+		} catch (FileNotFoundException fI) {
 			fI.printStackTrace();
-		}
-		catch(IOException i)
-		{
+		} catch (IOException i) {
 			i.printStackTrace();
 		}
 
 	}
-
 
 	/**
 	 * Methode executant un chainage avant
@@ -151,6 +157,28 @@ public class Moteur {
 			 * try { Thread.sleep(10000); } catch (final InterruptedException e)
 			 * { throw new RuntimeException(e); }
 			 */
+		}
+	}
+
+	/**
+	 * Cette methode permet de saisir le but que l'utilisateur souhaite
+	 * atteindre, puis affiche si celui-ci est atteignable ou non.
+	 */
+	public void initChainageArrière() {
+		System.out.println("Entrez le nom de la variable but :\n");
+		String nomBut = null;
+		while (nomBut == null) {
+			nomBut = scan.next();
+		}
+		System.out.println("Entrez la valeur de la variable but : \n");
+		String valeurBut = null;
+		while (valeurBut == null) {
+			valeurBut = scan.next();
+		}
+		if (chainageArriere(nomBut, valeurBut)) {
+			System.out.println("Le but saisi peut être atteint !\n");
+		} else {
+			System.out.println("Le but saisi ne peut être atteint !\n");
 		}
 	}
 
@@ -248,7 +276,8 @@ public class Moteur {
 	}
 
 	/**
-	 * Methode permettant d'évaluer un élément (donc un nom, un operateur et une valeur)
+	 * Methode permettant d'évaluer un élément (donc un nom, un operateur et une
+	 * valeur)
 	 * 
 	 * @param nom
 	 * @param operateur
@@ -341,5 +370,93 @@ public class Moteur {
 			}
 		}
 		return true;
+	}
+
+	public void menu() {
+		Integer choice = null;
+		while (choice == null || choice != 0) {
+			StringBuilder affich = new StringBuilder("Menu du moteur 0+\n");
+			affich.append("Entrez le numero de l'option que vous voulez utiliser\n");
+			affich.append("0. Quitter\n");
+			affich.append("1. Affichage\n");
+			affich.append("2. Chainage avant\n");
+			affich.append("3. Trace d'execution\n");
+			affich.append("4. Chainage arrière\n");
+			affich.append("5. Modifier stratégie de gestion des conflits\n");
+			System.out.println(affich.toString());
+			choice = null;
+			while (choice == null || (choice < 0 && choice > 5)) {
+				if (choice != null && (choice < 0 && choice > 5)) {
+					System.out.println("!! Choix invalide !!\n");
+				}
+				try {
+					choice = scan.nextInt();
+				} catch (final InputMismatchException e) {
+					System.out.println("!! Choix invalide !!\n");
+				}
+			}
+			switch (choice) {
+			case 1:
+				System.out.println(toString());
+				break;
+			case 2:
+				chainageAvant();
+				break;
+			case 3:
+				if (stackTrace.size() > 0) {
+					System.out.println(stackTrace);
+				} else {
+					System.out
+							.println("Aucune trace d'execution disponible, veuillez executer le chainage avant en premier lieu.\n");
+				}
+				break;
+			case 4:
+				initChainageArrière();
+				break;
+			case 5:
+				modifyGestionConflit();
+				break;
+			default:
+				if (choice != 0) {
+					throw new IllegalArgumentException(
+							"Choix de menu incorrect");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Cette methode permet de modifier le mode de gestion des conflits parmis
+	 * ceux existants
+	 */
+	public void modifyGestionConflit() {
+		Integer choice = null;
+		while (choice == null || choice != 0) {
+			StringBuilder sb = new StringBuilder(
+					"Choississez le nouveau mode de gestion des conflits :\n");
+			sb.append("0. Retour au menu\n");
+			for (StrategieConflit s : StrategieConflit.getAll()) {
+				sb.append(s.getNumero());
+				sb.append(". ");
+				sb.append(s.getDescription());
+				sb.append("\n");
+			}
+			System.out.println(sb.toString());
+			while (choice == null || (choice < 0 && choice > 5)) {
+				try {
+					choice = scan.nextInt();
+				} catch (final InputMismatchException e) {
+					System.out.println("!! Choix invalide !!\n");
+				}
+				final StrategieConflit s = StrategieConflit
+						.getStrategieConflit(choice);
+				if (s == null) {
+					System.out.println("!! Choix invalide !!\n");
+				} else {
+					this.strategieConflit = s;
+					return;
+				}
+			}
+		}
 	}
 }

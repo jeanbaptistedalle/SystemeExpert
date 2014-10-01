@@ -9,7 +9,7 @@ package moteur.zero.plus;
 public class Main {
 
 	public static void main(String[] args) {
-		final Moteur m = new Moteur();
+		final Moteur m = new Moteur(false);
 		final BaseRegle br = Moteur.baseRegle;
 		final BaseIncoherence bi = Moteur.baseIncoherence;
 		final BaseFait bf = Moteur.baseFait;
@@ -39,18 +39,19 @@ public class Main {
 		bf.addFait("vitesse", "130");
 		bf.addFait("temps", "pluie");
 		bf.addFait("typeRoute", "autoroute");
-		m.chainageAvant();
-		StringBuilder sb = new StringBuilder("Stacktrace chainage avant : ");
-		sb.append(Moteur.stackTrace);
-		System.out.println(sb.toString());
-		final String nomBut = "perteDePoint";
-		final String valeurBut = "3";
-		StringBuilder sb2 = new StringBuilder("Chainage arriere (but : ");
-		sb2.append(nomBut);
-		sb2.append("=");
-		sb2.append(valeurBut);
-		sb2.append(") : ");
-		sb2.append(m.chainageArriere(nomBut, valeurBut));
-		System.out.println(sb2.toString());
+		// m.chainageAvant();
+		// StringBuilder sb = new StringBuilder("Stacktrace chainage avant : ");
+		// sb.append(Moteur.stackTrace);
+		// System.out.println(sb.toString());
+		// final String nomBut = "perteDePoint";
+		// final String valeurBut = "3";
+		// StringBuilder sb2 = new StringBuilder("Chainage arriere (but : ");
+		// sb2.append(nomBut);
+		// sb2.append("=");
+		// sb2.append(valeurBut);
+		// sb2.append(") : ");
+		// sb2.append(m.chainageArriere(nomBut, valeurBut));
+		// System.out.println(sb2.toString());
+		m.menu();
 	}
 }
