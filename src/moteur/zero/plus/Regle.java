@@ -1,4 +1,7 @@
 package moteur.zero.plus;
+
+import java.util.List;
+
 /**
  * Classe représentant une règle. La syntaxe d'une règle est : <br/>
  * A = 2 & B = 3 : C = 4 <br/>
@@ -103,5 +106,22 @@ public class Regle {
 		result.append(" = ");
 		result.append(valeurResultat);
 		return result.toString();
+	}
+	
+	/**
+	 * Permet d'ajouter une liste d'élément à la règle. Si une liste existe
+	 * déjà, on les ajoute aux éléments existants
+	 * 
+	 * @param elements
+	 */
+	public void addElements(final List<Element> elements) {
+		Element existing = this.element;
+		while (existing.getNext() != null) {
+			existing = existing.getNext();
+		}
+		for (final Element elt : elements) {
+			existing.setNext(elt);
+			existing = existing.getNext();
+		}
 	}
 }

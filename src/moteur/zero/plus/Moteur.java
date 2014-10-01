@@ -45,16 +45,20 @@ public class Moteur {
 		
 		int numRegle  ;
 		Element tmp ;
-		Element[] tab = new Element[10];
+		List<Element> listElement = new ArrayList<Element>() ;
 		String ligne , resultat, element , nomElement , valElement ;
 		String[] tabLigne , tabElement, tabRegle , tabResultat;
-		BufferedReader Lecteur = null ;
+		String[] tabFait , tabFaitFinaux ;
+		BufferedReader Lecteur = null , lecteurFait = null ;
 		Operateur operateur ;
+		
 		
 		try
 		{
 			Lecteur = new BufferedReader(new FileReader("Regles.txt")) ;
-		
+			lecteurFait = new BufferedReader(new FileReader("Fait.txt")) ;
+			
+		Regle r = null ;
 		while((ligne = Lecteur.readLine()) != null )
 		{
 			tabLigne = ligne.split("[:]") ;
@@ -67,7 +71,7 @@ public class Moteur {
 				nomElement = tabRegle[0] ;
 				operateur = Operateur.testOperateur(tabRegle[1]) ;
 				valElement = tabRegle[2] ;
-				final Regle r = new Regle(numRegle, new Element(nomElement, operateur , valElement),tabResultat[0],tabResultat[2]);
+				r = new Regle(numRegle, new Element(nomElement, operateur , valElement),tabResultat[0],tabResultat[2]);
 				baseRegle.addRegle(r);
 			}
 			else
@@ -75,18 +79,24 @@ public class Moteur {
 				for(int i=0 ; i<tabElement.length ; i++)
 				{
 					tabRegle = tabElement[i].split("[ ]") ;
-					nomElement = tabRegle[i] ;
-					operateur = Operateur.testOperateur(tabRegle[i+1]) ;
-					valElement = tabRegle[i+2] ;
+					nomElement = tabRegle[0] ;
+					operateur = Operateur.testOperateur(tabRegle[1]) ;
+					valElement = tabRegle[2] ;
 					tmp = new Element(nomElement, operateur, valElement) ;
-					tab[i] = tmp ;
+					listElement.add(tmp);
 				}
-				for(int j=0 ; j<tab.length ; j++)
-				{
-					
-				}
+				r.addElements(listElement);
 			}
 		}
+		
+		while((ligne = lecteurFait.readLine()) != null)
+		{
+			tabFait = ligne.split("[=]") ;
+			
+			baseFait.addFait(tabFait[0], tabFait[1]);
+		
+		}
+			
 		}
 		catch(FileNotFoundException fI)
 		{
