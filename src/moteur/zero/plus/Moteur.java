@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Classe représentant un moteur d'inference 0+
@@ -20,12 +22,30 @@ public class Moteur {
 	public static BaseRegle baseRegle = new BaseRegle();
 	public static BaseIncoherence baseIncoherence = new BaseIncoherence();
 	public static List<String> stackTrace = new ArrayList<String>();
+	public static Scanner scan = new Scanner(System.in);
 
 	public StrategieConflit strategieConflit;
 
+	/**
+	 * Crée le moteur en générant les base à l'aide des fichiers .txt
+	 * correspondants
+	 */
 	public Moteur() {
+		this(true);
+	}
+
+	/**
+	 * Crée le moteur en générant les base à l'aide des fichiers .txt
+	 * correspondants si generer = true
+	 * 
+	 * @param generer
+	 */
+	public Moteur(final boolean generer) {
 		strategieConflit = StrategieConflit.PREMIERE_TROUVEE;
-		generate();
+		if (generer) {
+			// TODO a decommenter
+			// generate();
+		}
 	}
 
 	public String toString() {
@@ -40,7 +60,7 @@ public class Moteur {
 	}
 
 	/**
-	 * Genere le moteur d'inference à l'aide des fichiers BaseFait.txt,
+	 * Genere le moteur d'inference à l'aide des fichiers Fait.txt, Regles.txt
 	 * BaseRegle.txt et BaseIncoherence.txt
 	 */
 	public void generate() {
@@ -137,6 +157,28 @@ public class Moteur {
 			 * try { Thread.sleep(10000); } catch (final InterruptedException e)
 			 * { throw new RuntimeException(e); }
 			 */
+		}
+	}
+
+	/**
+	 * Cette methode permet de saisir le but que l'utilisateur souhaite
+	 * atteindre, puis affiche si celui-ci est atteignable ou non.
+	 */
+	public void initChainageArrière() {
+		System.out.println("Entrez le nom de la variable but :\n");
+		String nomBut = null;
+		while (nomBut == null) {
+			nomBut = scan.next();
+		}
+		System.out.println("Entrez la valeur de la variable but : \n");
+		String valeurBut = null;
+		while (valeurBut == null) {
+			valeurBut = scan.next();
+		}
+		if (chainageArriere(nomBut, valeurBut)) {
+			System.out.println("Le but saisi peut être atteint !\n\n");
+		} else {
+			System.out.println("Le but saisi ne peut être atteint !\n\n");
 		}
 	}
 
@@ -328,5 +370,97 @@ public class Moteur {
 			}
 		}
 		return true;
+	}
+
+	public void menu() {
+		Integer choice = null;
+		while (choice == null || choice != 0) {
+			StringBuilder affich = new StringBuilder("Menu du moteur 0+\n");
+			affich.append("Entrez le numero de l'option que vous voulez utiliser\n");
+			affich.append("0. Quitter\n");
+			affich.append("1. Affichage\n");
+			affich.append("2. Chainage avant\n");
+			affich.append("3. Trace d'execution\n");
+			affich.append("4. Chainage arrière\n");
+			affich.append("5. Modifier stratégie de gestion des conflits\n");
+			affich.append("6. Verifier cohérence du moteur\n");
+			System.out.println(affich.toString());
+			choice = null;
+			while (choice == null || (choice < 0 && choice > 6)) {
+				if (choice != null && (choice < 0 && choice > 6)) {
+					System.out.println("!! Choix invalide !!\n");
+				}
+				try {
+					choice = scan.nextInt();
+				} catch (final InputMismatchException e) {
+					System.out.println("!! Choix invalide !!\n");
+				}
+			}
+			switch (choice) {
+			case 1:
+				System.out.println(toString()+"\n");
+				break;
+			case 2:
+				chainageAvant();
+				break;
+			case 3:
+				if (stackTrace.size() > 0) {
+					System.out.println(stackTrace);
+				} else {
+					System.out
+							.println("Aucune trace d'execution disponible, veuillez executer le chainage avant en premier lieu.\n\n");
+				}
+				break;
+			case 4:
+				initChainageArrière();
+				break;
+			case 5:
+				modifyGestionConflit();
+				break;
+			case 6 : 
+				verifCoherence();
+				break;
+			default:
+				if (choice != 0) {
+					throw new IllegalArgumentException(
+							"Choix de menu incorrect");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Cette methode permet de modifier le mode de gestion des conflits parmis
+	 * ceux existants
+	 */
+	public void modifyGestionConflit() {
+		Integer choice = null;
+		while (choice == null || choice != 0) {
+			StringBuilder sb = new StringBuilder(
+					"Choississez le nouveau mode de gestion des conflits :\n");
+			sb.append("0. Retour au menu\n");
+			for (StrategieConflit s : StrategieConflit.getAll()) {
+				sb.append(s.getNumero());
+				sb.append(". ");
+				sb.append(s.getDescription());
+				sb.append("\n");
+			}
+			System.out.println(sb.toString());
+			while (choice == null || (choice < 0 && choice > 5)) {
+				try {
+					choice = scan.nextInt();
+				} catch (final InputMismatchException e) {
+					System.out.println("!! Choix invalide !!\n");
+				}
+				final StrategieConflit s = StrategieConflit
+						.getStrategieConflit(choice);
+				if (s == null) {
+					System.out.println("!! Choix invalide !!\n");
+				} else {
+					this.strategieConflit = s;
+					return;
+				}
+			}
+		}
 	}
 }

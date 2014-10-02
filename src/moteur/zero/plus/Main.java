@@ -9,7 +9,7 @@ package moteur.zero.plus;
 public class Main {
 
 	public static void main(String[] args) {
-		final Moteur m = new Moteur();
+		final Moteur m = new Moteur(false);
 		final BaseIncoherence bi = Moteur.baseIncoherence;
 
 		bi.addIncoherence(new Incoherence(1, new Element("perteDePoint",
@@ -17,7 +17,8 @@ public class Main {
 		
 		System.out.println(m);
 
-		m.chainageAvant();
+		// m.chainageAvant();
 		m.chainageArriere("perteDePermis","true");
+		m.menu();
 	}
 }
