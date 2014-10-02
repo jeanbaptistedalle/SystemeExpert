@@ -4,7 +4,7 @@ package moteur.zero.plus;
  * Classe représentant les incoherences qu'il faut pouvoir detecter dans le
  * moteur
  * 
- * @author etudiant
+ * @author JBD
  *
  */
 public class Incoherence {
@@ -32,6 +32,10 @@ public class Incoherence {
 
 	public void setElement(Element element) {
 		this.element = element;
+	}
+
+	public boolean evaluate(){
+		return element.evaluate();
 	}
 
 	/*

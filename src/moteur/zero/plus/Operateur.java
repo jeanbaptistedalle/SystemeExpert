@@ -1,11 +1,14 @@
 package moteur.zero.plus;
 
 /**
- * Enumeration représentant les opérateurs géré par le moteur d'inférence.
+ * Enumeration représentant les opérateurs géré par le moteur d'inférence
  * @author etudiant
+ * 
+ * @author JBD
  *
  */
 public enum Operateur {
+	
 	SUPERIEUR(">"),
 	
 	SUPERIEUR_OU_EGAL(">="),
@@ -49,4 +52,3 @@ public enum Operateur {
 	}
 	
 }
-

@@ -1,17 +1,21 @@
 package moteur.zero.plus;
 
+/**
+ * Une classe main pour lancer quelques tests non automatique
+ * 
+ * @author JBD
+ *
+ */
 public class Main {
 
-
 	public static void main(String[] args) {
-
 		final Moteur m = new Moteur();
-		final BaseRegle br = Moteur.baseRegle;
 		final BaseIncoherence bi = Moteur.baseIncoherence;
-		final BaseFait bf = Moteur.baseFait;
 
 		bi.addIncoherence(new Incoherence(1, new Element("perteDePoint",
 				Operateur.INFERIEUR, "0")));
+		
+		System.out.println(m);
 
 		m.chainageAvant();
 		m.chainageArriere("perteDePermis","true");

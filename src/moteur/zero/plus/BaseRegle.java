@@ -3,7 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author etudiant
+ * Classe représentant la base de règle du systeme expert.
+ * 
+ * @author JBD
  *
  */
 public class BaseRegle {

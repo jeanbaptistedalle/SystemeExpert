@@ -1,5 +1,6 @@
 package moteur.zero.plus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,10 @@ import java.util.List;
  * A = 2 & B = 3 : C = 4 <br/>
  * Dans le cas des booleans, il est nécessaire d'écrire true ou false
  * 
- * @author etudiant
+ * @author etudiant 1:A = 2&B = 3:C = 4<br/>
+ *         Dans le cas des booleans, il est nécessaire d'écrire true ou false
+ * 
+ * @author JBD
  *
  */
 public class Regle {
@@ -17,16 +21,20 @@ public class Regle {
 	private String nomResultat;
 	private String valeurResultat;
 
-	public Regle() {}
-	
-	public Regle(final Integer numero, final Element element, final String nomResultat, final String valeurResultat){
+	public Regle() {
+	}
+
+	public Regle(final Integer numero, final Element element,
+			final String nomResultat, final String valeurResultat) {
 		this.numero = numero;
 		this.element = element;
 		this.nomResultat = nomResultat;
 		this.valeurResultat = valeurResultat;
 	}
-	
-	public Regle(final Integer numero, final String nomResultat, final String valeurResultat){
+
+	public Regle(final Integer numero, final String nomResultat,
+			final String valeurResultat) {
+
 		this(numero, null, nomResultat, valeurResultat);
 	}
 
@@ -61,10 +69,34 @@ public class Regle {
 	public void setValeurResultat(final String valeurResultat) {
 		this.valeurResultat = valeurResultat;
 	}
-	
-	public boolean evaluate(){
-		return element.evaluate();
+
+	public boolean evaluate() {
+		if (element != null) {
+			return element.evaluate();
+		}
+		return false;
 	}
+
+	/**
+	 * Retourne le nombre de prémisse de la règle
+	 * 
+	 * @return
+	 */
+	public int getNbPremisse() {
+		Element elt = element;
+		int cpt = 0;
+		while (elt != null) {
+			cpt++;
+			elt = elt.getNext();
+		}
+		return cpt;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 
 	@Override
 	public int hashCode() {
@@ -73,6 +105,12 @@ public class Regle {
 		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
 		return result;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 
 	@Override
 	public boolean equals(Object obj) {
@@ -107,7 +145,7 @@ public class Regle {
 		result.append(valeurResultat);
 		return result.toString();
 	}
-	
+
 	/**
 	 * Permet d'ajouter une liste d'élément à la règle. Si une liste existe
 	 * déjà, on les ajoute aux éléments existants
@@ -116,12 +154,17 @@ public class Regle {
 	 */
 	public void addElements(final List<Element> elements) {
 		Element existing = this.element;
-		while (existing.getNext() != null) {
+		while (existing != null && existing.getNext() != null) {
 			existing = existing.getNext();
 		}
 		for (final Element elt : elements) {
-			existing.setNext(elt);
-			existing = existing.getNext();
+			if (existing == null) {
+				existing = elt;
+				this.element = existing;
+			} else {
+				existing.setNext(elt);
+				existing = existing.getNext();
+			}
 		}
 	}
 }

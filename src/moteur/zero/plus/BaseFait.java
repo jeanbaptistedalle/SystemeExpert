@@ -7,7 +7,7 @@ import java.util.Map;
  * Classe représentant la base de fait. Les éléments de celle-ci sont stockés
  * dans une Map avec comme clef le nom de l'élément et comme valeur sa valeur.
  * 
- * @author etudiant
+ * @author JBD
  *
  */
 public class BaseFait {

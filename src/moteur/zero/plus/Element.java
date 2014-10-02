@@ -3,7 +3,7 @@ package moteur.zero.plus;
  * Correspond à une prémisse d'une règle. Si la règle contient plusieurs
  * prémisse, alors elles sont chainées grâce à next.
  * 
- * @author etudiant
+ * @author JBD
  *
  */
 public class Element {
@@ -162,8 +162,9 @@ public class Element {
 		result.append(operateur);
 		result.append(valeur);
 		if(next != null){
-			result.append(" & ");
+			result.append(" & [");
 			result.append(next);
+			result.append("]");
 		}
 		return result.toString();
 	}
