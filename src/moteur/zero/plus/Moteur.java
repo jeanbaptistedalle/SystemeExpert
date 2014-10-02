@@ -176,9 +176,9 @@ public class Moteur {
 			valeurBut = scan.next();
 		}
 		if (chainageArriere(nomBut, valeurBut)) {
-			System.out.println("Le but saisi peut être atteint !\n");
+			System.out.println("Le but saisi peut être atteint !\n\n");
 		} else {
-			System.out.println("Le but saisi ne peut être atteint !\n");
+			System.out.println("Le but saisi ne peut être atteint !\n\n");
 		}
 	}
 
@@ -383,10 +383,11 @@ public class Moteur {
 			affich.append("3. Trace d'execution\n");
 			affich.append("4. Chainage arrière\n");
 			affich.append("5. Modifier stratégie de gestion des conflits\n");
+			affich.append("6. Verifier cohérence du moteur\n");
 			System.out.println(affich.toString());
 			choice = null;
-			while (choice == null || (choice < 0 && choice > 5)) {
-				if (choice != null && (choice < 0 && choice > 5)) {
+			while (choice == null || (choice < 0 && choice > 6)) {
+				if (choice != null && (choice < 0 && choice > 6)) {
 					System.out.println("!! Choix invalide !!\n");
 				}
 				try {
@@ -397,7 +398,7 @@ public class Moteur {
 			}
 			switch (choice) {
 			case 1:
-				System.out.println(toString());
+				System.out.println(toString()+"\n");
 				break;
 			case 2:
 				chainageAvant();
@@ -407,7 +408,7 @@ public class Moteur {
 					System.out.println(stackTrace);
 				} else {
 					System.out
-							.println("Aucune trace d'execution disponible, veuillez executer le chainage avant en premier lieu.\n");
+							.println("Aucune trace d'execution disponible, veuillez executer le chainage avant en premier lieu.\n\n");
 				}
 				break;
 			case 4:
@@ -415,6 +416,9 @@ public class Moteur {
 				break;
 			case 5:
 				modifyGestionConflit();
+				break;
+			case 6 : 
+				verifCoherence();
 				break;
 			default:
 				if (choice != 0) {
