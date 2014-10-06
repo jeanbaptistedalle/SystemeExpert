@@ -188,7 +188,7 @@ public class Moteur {
 
 	/**
 	 * Genere le moteur d'inference à l'aide des fichiers Fait.txt, Regles.txt
-	 * BaseRegle.txt et BaseIncoherence.txt
+	 * et Incoherence.txt
 	 */
 	public void generate() {
 
