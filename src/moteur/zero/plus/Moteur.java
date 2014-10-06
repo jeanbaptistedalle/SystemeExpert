@@ -43,8 +43,7 @@ public class Moteur {
 	public Moteur(final boolean generer) {
 		strategieConflit = StrategieConflit.PREMIERE_TROUVEE;
 		if (generer) {
-			// TODO a decommenter
-			// generate();
+			generate();
 		}
 	}
 
@@ -68,9 +67,9 @@ public class Moteur {
 		int numRegle;
 		Element tmp;
 		List<Element> listElement = new ArrayList<Element>();
-		String ligne, resultat, element, nomElement, valElement;
+		String ligne, nomElement, valElement;
 		String[] tabLigne, tabElement, tabRegle, tabResultat;
-		String[] tabFait, tabFaitFinaux;
+		String[] tabFait;
 		BufferedReader Lecteur = null, lecteurFait = null;
 		Operateur operateur;
 
@@ -109,7 +108,6 @@ public class Moteur {
 
 			while ((ligne = lecteurFait.readLine()) != null) {
 				tabFait = ligne.split("[=]");
-				// System.out.println(tabFait[0] + " " + tabFait[1]) ;
 				baseFait.addFait(tabFait[0], tabFait[1]);
 			}
 
@@ -394,11 +392,12 @@ public class Moteur {
 					choice = scan.nextInt();
 				} catch (final InputMismatchException e) {
 					System.out.println("!! Choix invalide !!\n");
+					scan.nextLine();
 				}
 			}
 			switch (choice) {
 			case 1:
-				System.out.println(toString()+"\n");
+				System.out.println(toString() + "\n");
 				break;
 			case 2:
 				chainageAvant();
@@ -417,7 +416,7 @@ public class Moteur {
 			case 5:
 				modifyGestionConflit();
 				break;
-			case 6 : 
+			case 6:
 				verifCoherence();
 				break;
 			default:
