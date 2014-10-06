@@ -58,144 +58,92 @@ public class Moteur {
 		result.append(baseFait);
 		return result.toString();
 	}
-	
-	/**
-	 * Génère la base de règle grâce au fichier Regle.txt
-	 * 
-	 */
-	public void rempliBaseRegle()
-	{
-		BufferedReader Lecteur = null ;
-		String ligne , nomElement , valElement ;
-		String[] tabLigne, tabResultat, tabElement, tabRegle ;
-		int numRegle ;
-		Operateur operateur ;
-		Element tmp ;
-		List<Element> listElement = new ArrayList<Element>() ;
-		
-		try
-		{
-			
-		Lecteur = new BufferedReader(new FileReader("Regles.txt"));
-		
-		Regle r = null;
-		while ((ligne = Lecteur.readLine()) != null) {
-			tabLigne = ligne.split("[:]");
-			numRegle = Integer.parseInt(tabLigne[0]);
-			tabResultat = tabLigne[2].split("[ ]");
-			tabElement = tabLigne[1].split("[&]");
-			if (tabElement.length == 1) {
-				tabRegle = tabElement[0].split("[ ]");
-				nomElement = tabRegle[0];
-				operateur = Operateur.testOperateur(tabRegle[1]);
-				valElement = tabRegle[2];
-				r = new Regle(numRegle, new Element(nomElement, operateur,
-						valElement), tabResultat[0], tabResultat[2]);
-			} else {
-				r = new Regle(numRegle, tabResultat[0], tabResultat[2]);
-				listElement.clear();
-				for (int i = 0; i < tabElement.length; i++) {
-					tabRegle = tabElement[i].split("[ ]");
-					nomElement = tabRegle[0];
-					operateur = Operateur.testOperateur(tabRegle[1]);
-					valElement = tabRegle[2];
-					tmp = new Element(nomElement, operateur, valElement);
-					listElement.add(tmp);
-				}
-				r.addElements(listElement);
-			}
-			baseRegle.addRegle(r);
-		}
-		}
-		catch(FileNotFoundException f)
-		{
-			f.printStackTrace();
-		}
-		catch(IOException i)
-		{
-			i.printStackTrace();
-		}
-		
-	}
-	
-	/**
-	 * Génère la base de fait grâce au fichier Fait.txt
-	 * 
-	 */
-	public void rempliBaseFait()
-	{
-		BufferedReader lecteurFait = null ;
-		String ligne ;
-		String[] tabFait ;
-		
-		try
-		{
-		lecteurFait = new BufferedReader(new FileReader("Fait.txt"));
-		
-		while ((ligne = lecteurFait.readLine()) != null) {
-			tabFait = ligne.split("[=]");
-			baseFait.addFait(tabFait[0], tabFait[1]);
-			
-		}
-		}
-		catch(FileNotFoundException f)
-		{
-			f.printStackTrace();
-		}
-		catch(IOException i)
-		{
-			i.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Génère la base d'incohérence grâce au fichier Incoherence.txt
-	 * 
-	 */
-	public void rempliBaseIncoherence()
-	{
-		BufferedReader lecteurIncoherence = null ;
-		String ligne , nomInc, valInc ;
-		String[] tabInco ;
-		int numInc ;
-		Element elem ;
-		Operateur oper ;
-		
-		
-		try 
-		{
-			
-		lecteurIncoherence = new BufferedReader(new FileReader("Incoherence.txt")) ;
-
-		while((ligne = lecteurIncoherence.readLine()) != null)
-		{
-			tabInco = ligne.split("[ ]") ;
-			numInc = Integer.parseInt(tabInco[0]) ;
-			nomInc = tabInco[1] ;
-			oper = Operateur.testOperateur(tabInco[2]) ;
-			valInc = tabInco[3] ;
-			elem = new Element(nomInc,oper,valInc) ;
-			baseIncoherence.addIncoherence(new Incoherence(numInc,elem));
-		}
-			
-		} catch (FileNotFoundException fI) 
-		{
-			fI.printStackTrace();
-		} catch (IOException i) 
-		{
-			i.printStackTrace();
-		}
-	}
 
 	/**
-	 * Genere le moteur d'inference à l'aide des fichiers Fait.txt, Regles.txt
+<<<<<<< HEAD
+	 * Genere le moteur d'inference à l'aide des fichiers BaseFait.txt,
 	 * BaseRegle.txt et BaseIncoherence.txt
+=======
+	 * Genere le moteur d'inference à l'aide des fichiers Fait.txt, Regles.txt
+	 * et BaseIncoherence.txt
+>>>>>>> 9a1ea2a37ed14b2c0c4b3de94528fa21e937fed2
 	 */
 	public void generate() {
 
-		rempliBaseRegle() ;
-		rempliBaseFait() ;
-		rempliBaseIncoherence() ;
+		int numRegle;
+		Element tmp;
+		List<Element> listElement = new ArrayList<Element>();
+		String ligne, resultat, element, nomElement, valElement;
+		String[] tabLigne, tabElement, tabRegle, tabResultat;
+		String[] tabFait, tabFaitFinaux;
+		BufferedReader Lecteur = null, lecteurFait = null;
+		Operateur operateur;
+
+		try {
+			Lecteur = new BufferedReader(new FileReader("Regles.txt"));
+			lecteurFait = new BufferedReader(new FileReader("Fait.txt"));
+
+			Regle r = null;
+			while ((ligne = Lecteur.readLine()) != null) {
+				tabLigne = ligne.split("[:]");
+				numRegle = Integer.parseInt(tabLigne[0]);
+				tabResultat = tabLigne[2].split("[ ]");
+				tabElement = tabLigne[1].split("[&]");
+				if (tabElement.length == 1) {
+					tabRegle = tabElement[0].split("[ ]");
+					nomElement = tabRegle[0];
+					operateur = Operateur.testOperateur(tabRegle[1]);
+					valElement = tabRegle[2];
+					r = new Regle(numRegle, new Element(nomElement, operateur,
+							valElement), tabResultat[0], tabResultat[2]);
+<<<<<<< HEAD
+				} else {
+					r = new Regle(numRegle, tabResultat[0], tabResultat[2]);
+					listElement.clear();
+					for (int i = 0; i < tabElement.length; i++) {
+						tabRegle = tabElement[i].split("[ ]");
+						nomElement = tabRegle[0];
+						operateur = Operateur.testOperateur(tabRegle[1]);
+						valElement = tabRegle[2];
+=======
+					baseRegle.addRegle(r);
+				} else {
+					for (int i = 0; i < tabElement.length; i++) {
+						tabRegle = tabElement[i].split("[ ]");
+						nomElement = tabRegle[i];
+						operateur = Operateur.testOperateur(tabRegle[i + 1]);
+						valElement = tabRegle[i + 2];
+>>>>>>> 9a1ea2a37ed14b2c0c4b3de94528fa21e937fed2
+						tmp = new Element(nomElement, operateur, valElement);
+						listElement.add(tmp);
+					}
+					r.addElements(listElement);
+				}
+<<<<<<< HEAD
+				baseRegle.addRegle(r);
+			}
+
+			while ((ligne = lecteurFait.readLine()) != null) {
+				tabFait = ligne.split("[=]");
+				// System.out.println(tabFait[0] + " " + tabFait[1]) ;
+				baseFait.addFait(tabFait[0], tabFait[1]);
+=======
+			}
+
+			while ((ligne = lecteurFait.readLine()) != null) {
+				tabFait = ligne.split("[:]");
+				for (int i = 0; i < tabFait.length; i++) {
+					tabFaitFinaux = tabFait[i].split("[ ]");
+					baseFait.addFait(tabFaitFinaux[0], tabFaitFinaux[1]);
+				}
+>>>>>>> 9a1ea2a37ed14b2c0c4b3de94528fa21e937fed2
+			}
+
+		} catch (FileNotFoundException fI) {
+			fI.printStackTrace();
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
 
 	}
 
