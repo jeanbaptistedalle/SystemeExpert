@@ -57,131 +57,122 @@ public class Moteur {
 		result.append(baseFait);
 		return result.toString();
 	}
-	
+
 	/**
-	 * Génère la base de règle grâce au fichier Regle.txt
+	 * Génère la base de règle grâce au fichier Regle.txt<br/>
+	 * La syntaxe est : (les espaces sont représentés par des '_' )<br/>
+	 * <numeroRegle>:<variable>_<operateur>_<valeur>[&<variable>_<operateur>_<
+	 * valeur>]:<nomVariable>=<valeur>
 	 * 
 	 */
-	public void rempliBaseRegle()
-	{
-		BufferedReader Lecteur = null ;
-		String ligne , nomElement , valElement ;
-		String[] tabLigne, tabResultat, tabElement, tabRegle ;
-		int numRegle ;
-		Operateur operateur ;
-		Element tmp ;
-		List<Element> listElement = new ArrayList<Element>() ;
-		
-		try
-		{
-			
-		Lecteur = new BufferedReader(new FileReader("Regles.txt"));
-		
-		Regle r = null;
-		while ((ligne = Lecteur.readLine()) != null) {
-			tabLigne = ligne.split("[:]");
-			numRegle = Integer.parseInt(tabLigne[0]);
-			tabResultat = tabLigne[2].split("[ ]");
-			tabElement = tabLigne[1].split("[&]");
-			if (tabElement.length == 1) {
-				tabRegle = tabElement[0].split("[ ]");
-				nomElement = tabRegle[0];
-				operateur = Operateur.testOperateur(tabRegle[1]);
-				valElement = tabRegle[2];
-				r = new Regle(numRegle, new Element(nomElement, operateur,
-						valElement), tabResultat[0], tabResultat[2]);
-			} else {
-				r = new Regle(numRegle, tabResultat[0], tabResultat[2]);
-				listElement.clear();
-				for (int i = 0; i < tabElement.length; i++) {
-					tabRegle = tabElement[i].split("[ ]");
+	public void rempliBaseRegle() {
+		BufferedReader Lecteur = null;
+		String ligne, nomElement, valElement;
+		String[] tabLigne, tabResultat, tabElement, tabRegle;
+		int numRegle;
+		Operateur operateur;
+		Element tmp;
+		List<Element> listElement = new ArrayList<Element>();
+
+		try {
+
+			Lecteur = new BufferedReader(new FileReader("Regles.txt"));
+
+			Regle r = null;
+			while ((ligne = Lecteur.readLine()) != null) {
+				tabLigne = ligne.split("[:]");
+				numRegle = Integer.parseInt(tabLigne[0]);
+				tabResultat = tabLigne[2].split("[ ]");
+				tabElement = tabLigne[1].split("[&]");
+				if (tabElement.length == 1) {
+					tabRegle = tabElement[0].split("[ ]");
 					nomElement = tabRegle[0];
 					operateur = Operateur.testOperateur(tabRegle[1]);
 					valElement = tabRegle[2];
-					tmp = new Element(nomElement, operateur, valElement);
-					listElement.add(tmp);
+					r = new Regle(numRegle, new Element(nomElement, operateur,
+							valElement), tabResultat[0], tabResultat[2]);
+				} else {
+					r = new Regle(numRegle, tabResultat[0], tabResultat[2]);
+					listElement.clear();
+					for (int i = 0; i < tabElement.length; i++) {
+						tabRegle = tabElement[i].split("[ ]");
+						nomElement = tabRegle[0];
+						operateur = Operateur.testOperateur(tabRegle[1]);
+						valElement = tabRegle[2];
+						tmp = new Element(nomElement, operateur, valElement);
+						listElement.add(tmp);
+					}
+					r.addElements(listElement);
 				}
-				r.addElements(listElement);
+				baseRegle.addRegle(r);
 			}
-			baseRegle.addRegle(r);
-		}
-		}
-		catch(FileNotFoundException f)
-		{
+		} catch (FileNotFoundException f) {
 			f.printStackTrace();
-		}
-		catch(IOException i)
-		{
+		} catch (IOException i) {
 			i.printStackTrace();
 		}
-		
-	}
-	
-	/**
-	 * Génère la base de fait grâce au fichier Fait.txt
-	 * 
-	 */
-	public void rempliBaseFait()
-	{
-		BufferedReader lecteurFait = null ;
-		String ligne ;
-		String[] tabFait ;
-		
-		try
-		{
-		lecteurFait = new BufferedReader(new FileReader("Fait.txt"));
-		
-		while ((ligne = lecteurFait.readLine()) != null) {
-			tabFait = ligne.split("[=]");
-			baseFait.addFait(tabFait[0], tabFait[1]);
-			
-		}
-		}
-		catch(FileNotFoundException f)
-		{
-			f.printStackTrace();
-		}
-		catch(IOException i)
-		{
-			i.printStackTrace();
-		}
-	}
-	
-	/**
-	 * Génère la base d'incohérence grâce au fichier Incoherence.txt
-	 * 
-	 */
-	public void rempliBaseIncoherence()
-	{
-		BufferedReader lecteurIncoherence = null ;
-		String ligne , nomInc, valInc ;
-		String[] tabInco ;
-		int numInc ;
-		Element elem ;
-		Operateur oper ;
-		
-		
-		try 
-		{
-			
-		lecteurIncoherence = new BufferedReader(new FileReader("Incoherence.txt")) ;
 
-		while((ligne = lecteurIncoherence.readLine()) != null)
-		{
-			tabInco = ligne.split("[ ]") ;
-			numInc = Integer.parseInt(tabInco[0]) ;
-			nomInc = tabInco[1] ;
-			oper = Operateur.testOperateur(tabInco[2]) ;
-			valInc = tabInco[3] ;
-			elem = new Element(nomInc,oper,valInc) ;
-			baseIncoherence.addIncoherence(new Incoherence(numInc,elem));
+	}
+
+	/**
+	 * Génère la base de fait grâce au fichier Fait.txt<br/>
+	 * La syntaxe est : (les espaces sont représentés par des '_' )<br/>
+	 * <variable>_=_<valeur>
+	 * 
+	 */
+	public void rempliBaseFait() {
+		BufferedReader lecteurFait = null;
+		String ligne;
+		String[] tabFait;
+
+		try {
+			lecteurFait = new BufferedReader(new FileReader("Fait.txt"));
+
+			while ((ligne = lecteurFait.readLine()) != null) {
+				tabFait = ligne.split("[=]");
+				baseFait.addFait(tabFait[0], tabFait[1]);
+
+			}
+		} catch (FileNotFoundException f) {
+			f.printStackTrace();
+		} catch (IOException i) {
+			i.printStackTrace();
 		}
-			
-		} catch (FileNotFoundException fI) 
-		{
+	}
+
+	/**
+	 * Génère la base d'incohérence grâce au fichier Incoherence.txt La syntaxe
+	 * est : (les espaces sont représentés par des '_' )<br/>
+	 * <variable>_<operateur>_<valeur>
+	 * 
+	 * 
+	 */
+	public void rempliBaseIncoherence() {
+		BufferedReader lecteurIncoherence = null;
+		String ligne, nomInc, valInc;
+		String[] tabInco;
+		int numInc;
+		Element elem;
+		Operateur oper;
+
+		try {
+
+			lecteurIncoherence = new BufferedReader(new FileReader(
+					"Incoherence.txt"));
+
+			while ((ligne = lecteurIncoherence.readLine()) != null) {
+				tabInco = ligne.split("[ ]");
+				numInc = Integer.parseInt(tabInco[0]);
+				nomInc = tabInco[1];
+				oper = Operateur.testOperateur(tabInco[2]);
+				valInc = tabInco[3];
+				elem = new Element(nomInc, oper, valInc);
+				baseIncoherence.addIncoherence(new Incoherence(numInc, elem));
+			}
+
+		} catch (FileNotFoundException fI) {
 			fI.printStackTrace();
-		} catch (IOException i) 
-		{
+		} catch (IOException i) {
 			i.printStackTrace();
 		}
 	}
@@ -192,9 +183,9 @@ public class Moteur {
 	 */
 	public void generate() {
 
-		rempliBaseRegle() ;
-		rempliBaseFait() ;
-		rempliBaseIncoherence() ;
+		rempliBaseRegle();
+		rempliBaseFait();
+		rempliBaseIncoherence();
 
 	}
 
@@ -202,6 +193,16 @@ public class Moteur {
 	 * Methode executant un chainage avant
 	 */
 	public void chainageAvant() {
+		final Incoherence incoherence = verifCoherence();
+		if (incoherence != null) {
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("Le moteur n'est pas cohérent, la règle \"");
+			stringBuilder.append(incoherence);
+			stringBuilder
+					.append("\" n'est pas respecté, il est donc impossible de lancer le chainage avant");
+			System.out.println(stringBuilder.toString());
+			return;
+		}
 		/* Avant de lancer le chainage, on vide l'ancienne stacktrace */
 		stackTrace.clear();
 		int nbInference = 0;
@@ -219,21 +220,48 @@ public class Moteur {
 					 * Si elle est respectée, on applique la conclusion de la
 					 * règle et on la retire des règles sur lesquelles itérer
 					 */
+					System.out.println("La règle \"" + r + "\" a été executée");
 					baseFait.addFait(r.getNomResultat(), r.getValeurResultat());
 					listeRegleModifie.remove(r);
 					inference = true;
 					nbInference++;
-					stackTrace.add(nbInference + " : " + r);
+					stackTrace.add("Inference n°" + nbInference
+							+ " : Règle executée : " + r);
 				}
 			}
-			/*
-			 * Decommenter le code ci-dessous pour ajouter un délai entre chaque
-			 * itération du chainage
-			 */
-			/*
-			 * try { Thread.sleep(10000); } catch (final InterruptedException e)
-			 * { throw new RuntimeException(e); }
-			 */
+			sleep(500);
+		}
+		System.out
+				.println("Fin du chainage avant, les règles suivantes n'ont pas été executée");
+		stackTrace.add("Liste des règles non executées :");
+		for (Regle r : listeRegleModifie) {
+			stackTrace.add(r.toString());
+			System.out.println("\"" + r + "\"");
+		}
+		waitForInput();
+	}
+
+	public void waitForInput() {
+		System.out.println(System.getProperty("line.separator"));
+		System.out.println("Appuyez sur \"Entrer\" pour continuer");
+		try {
+			System.in.read();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(System.getProperty("line.separator"));
+	}
+
+	/**
+	 * Methode mettant en pause le programme pendant un nombre de temps en ms.
+	 * 
+	 * @param time
+	 */
+	public void sleep(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (final InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -242,6 +270,16 @@ public class Moteur {
 	 * atteindre, puis affiche si celui-ci est atteignable ou non.
 	 */
 	public void initChainageArrière() {
+		final Incoherence incoherence = verifCoherence();
+		if (incoherence != null) {
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("Le moteur n'est pas cohérent, la règle \"");
+			stringBuilder.append(incoherence);
+			stringBuilder
+					.append("\" n'est pas respecté, il est donc impossible de lancer le chainage arrière");
+			System.out.println(stringBuilder.toString());
+			return;
+		}
 		System.out.println("Entrez le nom de la variable but :\n");
 		String nomBut = null;
 		while (nomBut == null) {
@@ -253,14 +291,16 @@ public class Moteur {
 			valeurBut = scan.next();
 		}
 		if (chainageArriere(nomBut, valeurBut)) {
+			System.out.println("");
 			System.out.println("Le but saisi peut être atteint !\n\n");
 		} else {
+			System.out.println("");
 			System.out.println("Le but saisi ne peut être atteint !\n\n");
 		}
 	}
 
 	public boolean chainageArriere(final String nomBut, final String valeurBut) {
-		return chainageArriere(nomBut, Operateur.EGAL, valeurBut);
+		return chainageArriere(nomBut, Operateur.EGAL, valeurBut, true);
 	}
 
 	/**
@@ -269,10 +309,16 @@ public class Moteur {
 	 * @param but
 	 */
 	public boolean chainageArriere(final String nomBut,
-			final Operateur operateur, final String valeurBut) {
+			final Operateur operateur, final String valeurBut,
+			final boolean premiereIteration) {
+		System.out.println("On cherche à savoir si le fait \"" + nomBut
+				+ "\" pour la valeur \"" + valeurBut + "\" est atteignable.");
 		/* 1er cas : le but se trouve déjà dans la base de fait */
 		if (baseFait.contains(nomBut)) {
 			if (evaluateElement(nomBut, operateur, valeurBut)) {
+				System.out.println("Le fait \"" + nomBut
+						+ "\" pour la valeur \"" + valeurBut
+						+ "\" se trouve dans la base de fait.");
 				return true;
 			}
 		}
@@ -285,17 +331,64 @@ public class Moteur {
 			 */
 			if (r.getNomResultat().equals(nomBut)
 					&& r.getValeurResultat().equals(valeurBut)) {
+
 				reglesEnConflit.add(r);
 			}
 		}
 		if (reglesEnConflit.size() == 0) {
-			// Aucune regle ne correspond, donc non atteignable
-			return false;
+			if (premiereIteration) {
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.append("\"");
+				stringBuilder.append(nomBut);
+				stringBuilder.append("\" pour la valeur \"");
+				stringBuilder.append(valeurBut);
+				stringBuilder
+						.append("\" n'appartient pas à la base de fait et n'est produit par aucune règle.");
+				System.out.println(stringBuilder.toString());
+				// Aucune regle ne correspond, donc non atteignable
+				return false;
+			} else {
+				if (!baseFait.contains(nomBut)) {
+					System.out
+							.println("Il n'existe aucune valeur pour la variable \""
+									+ nomBut + "\". Veuillez en entrer une.");
+					String nouvelleValeur = null;
+					while (nouvelleValeur == null) {
+						nouvelleValeur = scan.next();
+					}
+					baseFait.put(nomBut, nouvelleValeur);
+					System.out.println("Relancement du chainage arrière avec les nouvelles valeurs ...");
+					return chainageArriere(nomBut, operateur, valeurBut, premiereIteration);
+				}else{
+					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.append("\"");
+					stringBuilder.append(nomBut);
+					stringBuilder.append("\" pour la valeur \"");
+					stringBuilder.append(valeurBut);
+					stringBuilder
+							.append("\" n'appartient pas à la base de fait et n'est produit par aucune règle.");
+					System.out.println(stringBuilder.toString());
+					// Aucune regle ne correspond, donc non atteignable
+					return false;
+				}
+			}
 		}
 		if (reglesEnConflit.size() == 1) {
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("La règle \"");
+			stringBuilder.append(reglesEnConflit.get(0));
+			stringBuilder.append("\" permet de produire \"");
+			stringBuilder.append(nomBut);
+			stringBuilder.append("\" pour la valeur \"");
+			stringBuilder.append(valeurBut);
+			stringBuilder
+					.append("\", on lance un chainage arrière sur chacune de ses prémisses.");
+			System.out.println(stringBuilder.toString());
 			// Une regle correspond donc on vérifie pour cette règle
 			return execRegle(reglesEnConflit.get(0));
 		} else {
+			System.out.println("Plusieurs règles permettent de produire \""
+					+ nomBut + "\" pour la valeur \"" + valeurBut + "\".");
 			return execRegle(choixRegle(reglesEnConflit));
 		}
 	}
@@ -305,27 +398,37 @@ public class Moteur {
 		 * On choisit une des règles valable.Actuellement, on choisit simplement
 		 * la première
 		 */
+		Regle regle = null;
 		switch (strategieConflit) {
 		case ALEATOIRE:
-			return regleEnConflit.get((new Double(Math.random()
+			regle = regleEnConflit.get((new Double(Math.random()
 					* (regleEnConflit.size() - 1))).intValue());
+			System.out.println("On choisit aléatoirement la règle \"" + regle
+					+ "\"");
+			return regle;
 		case PREMIERE_TROUVEE:
-			return regleEnConflit.get(0);
+			regle = regleEnConflit.get(0);
+			System.out
+					.println("On choisit la première règle \"" + regle + "\"");
+			return regle;
 		case PLUS_PREMISSE:
-			Regle choix = null;
 			for (final Regle r : regleEnConflit) {
 				/*
 				 * On prend la premiere règle trouvée, puis on la remplace à
 				 * chaque fois qu'on trouve une règle avec plus de prémisse
 				 */
-				if (choix == null) {
-					choix = r;
+				if (regle == null) {
+					regle = r;
 				} else {
-					if (choix.getNbPremisse() < r.getNbPremisse()) {
-						choix = r;
+					if (regle.getNbPremisse() < r.getNbPremisse()) {
+						regle = r;
 					}
 				}
 			}
+			System.out
+					.println("On choisit la règle avec le plus de prémisse \""
+							+ regle + "\"");
+			return regle;
 		default:
 			/* Stratégie inconnue */
 			throw new IllegalArgumentException(
@@ -339,7 +442,7 @@ public class Moteur {
 		Element elt = r.getElement();
 		while (elt != null) {
 			result = chainageArriere(elt.getNom(), elt.getOperateur(),
-					elt.getValeur());
+					elt.getValeur(), false);
 			if (!result) {
 				break;
 			} else {
@@ -440,13 +543,13 @@ public class Moteur {
 	 * 
 	 * @return
 	 */
-	public boolean verifCoherence() {
+	public Incoherence verifCoherence() {
 		for (Incoherence incoherence : baseIncoherence.getListeIncoherence()) {
 			if (incoherence.evaluate()) {
-				return false;
+				return incoherence;
 			}
 		}
-		return true;
+		return null;
 	}
 
 	public void menu() {
@@ -460,11 +563,10 @@ public class Moteur {
 			affich.append("3. Trace d'execution\n");
 			affich.append("4. Chainage arrière\n");
 			affich.append("5. Modifier stratégie de gestion des conflits\n");
-			affich.append("6. Verifier cohérence du moteur\n");
 			System.out.println(affich.toString());
 			choice = null;
-			while (choice == null || (choice < 0 && choice > 6)) {
-				if (choice != null && (choice < 0 && choice > 6)) {
+			while (choice == null || (choice < 0 && choice > 5)) {
+				if (choice != null && (choice < 0 && choice > 5)) {
 					System.out.println("!! Choix invalide !!\n");
 				}
 				try {
@@ -477,26 +579,26 @@ public class Moteur {
 			switch (choice) {
 			case 1:
 				System.out.println(toString() + "\n");
+				waitForInput();
 				break;
 			case 2:
 				chainageAvant();
 				break;
 			case 3:
 				if (stackTrace.size() > 0) {
-					System.out.println(stackTrace);
+					printStackTrace();
 				} else {
 					System.out
 							.println("Aucune trace d'execution disponible, veuillez executer le chainage avant en premier lieu.\n\n");
 				}
+				waitForInput();
 				break;
 			case 4:
 				initChainageArrière();
+				waitForInput();
 				break;
 			case 5:
 				modifyGestionConflit();
-				break;
-			case 6:
-				verifCoherence();
 				break;
 			default:
 				if (choice != 0) {
@@ -504,6 +606,12 @@ public class Moteur {
 							"Choix de menu incorrect");
 				}
 			}
+		}
+	}
+
+	public void printStackTrace() {
+		for (String s : stackTrace) {
+			System.out.println(s);
 		}
 	}
 

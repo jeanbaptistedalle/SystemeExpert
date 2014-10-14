@@ -1,7 +1,0 @@
-while((ligne = lecteurFait.readLine()) != null)
-		{
-			tabFait = ligne.split("[=]") ;
-			
-			baseFait.addFait(tabFait[0], tabFait[1]);
-		
-		}

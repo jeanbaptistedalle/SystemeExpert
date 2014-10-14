@@ -1,3 +1,2 @@
-vitesse=120
 typeRoute=autoroute
 temps=pluie

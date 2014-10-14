@@ -1,1 +1,1 @@
-1 PerteDePoint < O
+1 perteDePoint < 0
